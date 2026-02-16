@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>✨ Enchanted Princess ✨</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #f0c060;
+    --gold2: #e8a030;
+    --rose: #e8608a;
+    --lavender: #c8a0e8;
+    --midnight: #0a0618;
+    --deep: #120828;
+    --panel: rgba(18, 8, 40, 0.85);
+    --border: rgba(240, 192, 96, 0.3);
+    --text: #f5e8d0;
+    --dim: #9880b0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Crimson Pro', serif;
+    background: var(--midnight);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20'%3E%3Ccircle cx='10' cy='10' r='4' fill='%23f0c060' opacity='0.8'/%3E%3C/svg%3E") 10 10, auto;
+  }
+
+  /* ── STARFIELD ── */
+  #stars {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background:
+      radial-gradient(ellipse at 20% 30%, rgba(200,160,232,0.12) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 70%, rgba(232,96,138,0.10) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 10%, rgba(240,192,96,0.08) 0%, transparent 40%),
+      var(--midnight);
+  }
+  .star {
+    position: absolute;
+    border-radius: 50%;
+    background: white;
+    animation: twinkle var(--d, 3s) ease-in-out infinite alternate;
+  }
+  @keyframes twinkle {
+    from { opacity: 0.1; transform: scale(0.8); }
+    to   { opacity: 0.9; transform: scale(1.2); }
+  }
+
+  /* ── LAYOUT ── */
+  .app {
+    position: relative; z-index: 1;
+    display: grid;
+    grid-template-columns: 220px 1fr 220px;
+    grid-template-rows: auto 1fr;
+    min-height: 100vh;
+    gap: 0;
+  }
+
+  /* ── HEADER ── */
+  header {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 28px 20px 16px;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(180deg, rgba(10,6,24,0.95) 0%, transparent 100%);
+  }
+  header h1 {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: clamp(1.4rem, 3vw, 2.2rem);
+    color: var(--gold);
+    text-shadow: 0 0 30px rgba(240,192,96,0.5), 0 0 60px rgba(240,192,96,0.2);
+    letter-spacing: 0.08em;
+  }
+  header p {
+    font-style: italic;
+    color: var(--dim);
+    font-size: 0.95rem;
+    margin-top: 4px;
+  }
+
+  /* ── PANELS ── */
+  .panel {
+    padding: 16px 12px;
+    border-right: 1px solid var(--border);
+    background: var(--panel);
+    backdrop-filter: blur(10px);
+    overflow-y: auto;
+    max-height: calc(100vh - 90px);
+  }
+  .panel:last-child { border-right: none; border-left: 1px solid var(--border); }
+
+  .panel-title {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 0.7rem;
+    color: var(--gold);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    text-align: center;
+  }
+
+  /* ── STAGE ── */
+  .stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    position: relative;
+    background: radial-gradient(ellipse at 50% 60%, rgba(200,160,232,0.06) 0%, transparent 70%);
+  }
+
+  .stage-bg {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .stage-glow {
+    width: 300px; height: 500px;
+    background: radial-gradient(ellipse, rgba(200,160,232,0.08) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: breathe 4s ease-in-out infinite;
+  }
+  @keyframes breathe {
+    0%,100% { transform: scale(1); opacity: 0.6; }
+    50%      { transform: scale(1.1); opacity: 1; }
+  }
+
+  /* floor reflection */
+  .stage::after {
+    content: '';
+    position: absolute;
+    bottom: 40px; left: 50%;
+    transform: translateX(-50%);
+    width: 160px; height: 20px;
+    background: radial-gradient(ellipse, rgba(240,192,96,0.15) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: breathe 4s ease-in-out infinite;
+  }
+
+  /* ── CHARACTER SVG ── */
+  #character-wrap {
+    position: relative;
+    z-index: 2;
+    filter: drop-shadow(0 20px 40px rgba(0,0,0,0.6));
+  }
+  #character-wrap svg { display: block; }
+
+  /* sparkle on hover */
+  #character-wrap:hover { cursor: default; }
+
+  /* ── ITEM BUTTONS ── */
+  .category { margin-bottom: 18px; }
+  .cat-label {
+    font-size: 0.7rem;
+    color: var(--dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    font-style: italic;
+  }
+  .items { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .item-btn {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 8px 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+    font-family: 'Crimson Pro', serif;
+    color: var(--text);
+    font-size: 0.8rem;
+    line-height: 1.3;
+    position: relative;
+    overflow: hidden;
+  }
+  .item-btn::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(240,192,96,0.1), transparent);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .item-btn:hover { border-color: var(--gold); transform: translateY(-2px); box-shadow: 0 4px 16px rgba(240,192,96,0.2); }
+  .item-btn:hover::before { opacity: 1; }
+  .item-btn.active {
+    border-color: var(--gold);
+    background: rgba(240,192,96,0.12);
+    box-shadow: 0 0 16px rgba(240,192,96,0.25), inset 0 0 8px rgba(240,192,96,0.1);
+  }
+  .item-btn.active::after {
+    content: '✦';
+    position: absolute; top: 3px; right: 5px;
+    font-size: 8px; color: var(--gold);
+  }
+  .item-icon { font-size: 1.6rem; display: block; margin-bottom: 2px; }
+  .item-name { display: block; font-size: 0.72rem; color: var(--dim); }
+
+  /* ── COLOR SWATCHES ── */
+  .swatches { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  .swatch {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+  }
+  .swatch:hover { transform: scale(1.2); }
+  .swatch.active { border-color: white; box-shadow: 0 0 10px rgba(255,255,255,0.5); }
+
+  /* ── ACCESSORIES / RIGHT PANEL ── */
+  .acc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+
+  /* ── BOTTOM ACTIONS ── */
+  .actions {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    padding: 14px;
+    border-top: 1px solid var(--border);
+    background: rgba(10,6,24,0.9);
+  }
+  .btn {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    padding: 10px 22px;
+    border-radius: 30px;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.25s;
+    background: transparent;
+    color: var(--gold);
+  }
+  .btn:hover { background: rgba(240,192,96,0.12); border-color: var(--gold); box-shadow: 0 0 20px rgba(240,192,96,0.2); }
+  .btn.primary { background: linear-gradient(135deg, #c87040, #e8a030); color: #0a0618; border-color: transparent; font-weight: 700; }
+  .btn.primary:hover { box-shadow: 0 0 30px rgba(232,160,48,0.5); transform: scale(1.04); }
+
+  /* ── SPARKLES ── */
+  .sparkle {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    font-size: 1rem;
+    animation: sparkle-fly 0.8s ease-out forwards;
+  }
+  @keyframes sparkle-fly {
+    0%   { opacity: 1; transform: translate(0,0) scale(1) rotate(0deg); }
+    100% { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(0) rotate(180deg); }
+  }
+
+  /* ── NAME BADGE ── */
+  .name-badge {
+    margin-top: 12px;
+    text-align: center;
+    z-index: 2;
+    position: relative;
+  }
+  #princess-name {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 1rem;
+    color: var(--gold);
+    text-shadow: 0 0 20px rgba(240,192,96,0.4);
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    text-align: center;
+    width: 200px;
+    outline: none;
+    padding: 4px 8px;
+  }
+  #princess-name::placeholder { color: var(--dim); font-style: italic; }
+  .name-hint { font-size: 0.72rem; color: var(--dim); font-style: italic; margin-top: 4px; }
+
+  scrollbar-width: thin;
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<div id="stars"></div>
+
+<div class="app">
+  <!-- HEADER -->
+  <header>
+    <h1>✨ Enchanted Princess ✨</h1>
+    <p>Dress your royal highness for the royal ball</p>
+  </header>
+
+  <!-- LEFT PANEL: Gowns & Tops -->
+  <div class="panel" id="left-panel">
+    <div class="panel-title">Royal Wardrobe</div>
+
+    <div class="category">
+      <div class="cat-label">Gowns</div>
+      <div class="items" id="gown-items"></div>
+    </div>
+
+    <div class="category">
+      <div class="cat-label">Gown Color</div>
+      <div class="swatches" id="gown-colors"></div>
+    </div>
+
+    <div class="category">
+      <div class="cat-label">Cape / Cloak</div>
+      <div class="items" id="cape-items"></div>
+    </div>
+
+    <div class="category">
+      <div class="cat-label">Cape Color</div>
+      <div class="swatches" id="cape-colors"></div>
+    </div>
+  </div>
+
+  <!-- CENTER: Stage -->
+  <div class="stage">
+    <div class="stage-bg"><div class="stage-glow"></div></div>
+
+    <div id="character-wrap">
+      <svg id="princess" width="220" height="420" viewBox="0 0 220 420" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="skinGrad" cx="50%" cy="40%" r="60%">
+            <stop offset="0%" stop-color="#fde8c8"/>
+            <stop offset="100%" stop-color="#e8c090"/>
+          </radialGradient>
+          <radialGradient id="skinGrad2" cx="50%" cy="30%" r="60%">
+            <stop offset="0%" stop-color="#fde8c8"/>
+            <stop offset="100%" stop-color="#ddb080"/>
+          </radialGradient>
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="3" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <filter id="softglow">
+            <feGaussianBlur stdDeviation="6" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+
+        <!-- SHADOW -->
+        <ellipse cx="110" cy="415" rx="55" ry="6" fill="rgba(0,0,0,0.25)"/>
+
+        <!-- CAPE (behind body) -->
+        <g id="cape-layer"></g>
+
+        <!-- GOWN SKIRT -->
+        <g id="gown-layer">
+          <!-- default ball gown -->
+          <path id="gown-skirt" d="M70,175 Q30,240 20,340 Q55,370 110,375 Q165,370 200,340 Q190,240 150,175 Z" fill="#9b59b6"/>
+          <path id="gown-overlay" d="M85,175 Q65,230 60,310 Q85,340 110,345 Q135,340 160,310 Q155,230 135,175 Z" fill="rgba(255,255,255,0.1)"/>
+          <!-- skirt shimmer lines -->
+          <g id="gown-shimmer" opacity="0.2">
+            <line x1="80" y1="185" x2="50" y2="355" stroke="white" stroke-width="1"/>
+            <line x1="95" y1="180" x2="75" y2="358" stroke="white" stroke-width="1"/>
+            <line x1="110" y1="178" x2="110" y2="360" stroke="white" stroke-width="1"/>
+            <line x1="125" y1="180" x2="145" y2="358" stroke="white" stroke-width="1"/>
+            <line x1="140" y1="185" x2="170" y2="355" stroke="white" stroke-width="1"/>
+          </g>
+          <!-- hem decoration -->
+          <path id="gown-hem" d="M20,340 Q55,370 110,375 Q165,370 200,340" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="3"/>
+        </g>
+
+        <!-- BODICE -->
+        <g id="bodice-layer">
+          <path id="bodice" d="M78,145 Q70,160 70,175 L150,175 Q150,160 142,145 Q125,135 110,133 Q95,135 78,145 Z" fill="#7d3c98"/>
+          <path id="bodice-shine" d="M88,148 Q82,158 82,170 L100,170 Q100,155 96,148 Z" fill="rgba(255,255,255,0.15)"/>
+          <!-- corset lacing -->
+          <g id="lacing" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" fill="none">
+            <line x1="104" y1="140" x2="99" y2="172"/>
+            <line x1="116" y1="140" x2="121" y2="172"/>
+            <line x1="100" y1="148" x2="120" y2="148"/>
+            <line x1="99" y1="156" x2="121" y2="156"/>
+            <line x1="99" y1="164" x2="121" y2="164"/>
+          </g>
+        </g>
+
+        <!-- ARMS -->
+        <g id="arms-layer">
+          <!-- left arm -->
+          <path d="M78,148 Q55,160 48,195 Q52,200 60,198 Q65,168 82,158 Z" fill="url(#skinGrad2)"/>
+          <!-- right arm -->
+          <path d="M142,148 Q165,160 172,195 Q168,200 160,198 Q155,168 138,158 Z" fill="url(#skinGrad2)"/>
+          <!-- gloves layer (hidden by default) -->
+          <g id="gloves-layer" display="none">
+            <path d="M48,195 Q44,215 46,230 Q55,232 62,228 Q62,208 60,198 Z" fill="#c8a0e8"/>
+            <path d="M172,195 Q176,215 174,230 Q165,232 158,228 Q158,208 160,198 Z" fill="#c8a0e8"/>
+          </g>
+          <!-- hands -->
+          <ellipse cx="52" cy="203" rx="8" ry="6" fill="url(#skinGrad2)"/>
+          <ellipse cx="168" cy="203" rx="8" ry="6" fill="url(#skinGrad2)"/>
+        </g>
+
+        <!-- NECK -->
+        <rect id="neck" x="102" y="118" width="16" height="20" rx="4" fill="url(#skinGrad)"/>
+
+        <!-- NECKLACE layer -->
+        <g id="necklace-layer"></g>
+
+        <!-- HEAD -->
+        <ellipse id="face" cx="110" cy="95" rx="38" ry="42" fill="url(#skinGrad)"/>
+
+        <!-- HAIR (back) -->
+        <g id="hair-back-layer">
+          <ellipse id="hair-back" cx="110" cy="88" rx="42" ry="46" fill="#4a2c0a"/>
+        </g>
+
+        <!-- EARS -->
+        <ellipse cx="72" cy="97" rx="7" ry="9" fill="url(#skinGrad)"/>
+        <ellipse cx="148" cy="97" rx="7" ry="9" fill="url(#skinGrad)"/>
+
+        <!-- FACE FEATURES -->
+        <!-- eyes -->
+        <g id="eyes">
+          <ellipse cx="95" cy="92" rx="9" ry="10" fill="#1a0a30"/>
+          <ellipse cx="125" cy="92" rx="9" ry="10" fill="#1a0a30"/>
+          <circle cx="95" cy="92" r="5" fill="#6b40c8"/>
+          <circle cx="125" cy="92" r="5" fill="#6b40c8"/>
+          <circle cx="97" cy="89" r="2.5" fill="white"/>
+          <circle cx="127" cy="89" r="2.5" fill="white"/>
+          <!-- lashes -->
+          <path d="M86,86 Q88,82 91,84" stroke="#1a0a30" stroke-width="1.5" fill="none"/>
+          <path d="M99,85 Q101,81 104,83" stroke="#1a0a30" stroke-width="1.5" fill="none"/>
+          <path d="M116,85 Q118,81 121,83" stroke="#1a0a30" stroke-width="1.5" fill="none"/>
+          <path d="M129,86 Q132,82 134,84" stroke="#1a0a30" stroke-width="1.5" fill="none"/>
+        </g>
+
+        <!-- brows -->
+        <path d="M84,80 Q95,75 104,78" stroke="#3a1a05" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <path d="M116,78 Q125,75 136,80" stroke="#3a1a05" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+
+        <!-- nose -->
+        <path d="M107,100 Q110,108 113,100" stroke="#d4a070" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+
+        <!-- lips -->
+        <path d="M98,112 Q104,108 110,110 Q116,108 122,112 Q116,120 110,118 Q104,120 98,112 Z" fill="#e05080"/>
+        <path d="M98,112 Q110,115 122,112" stroke="rgba(255,255,255,0.2)" stroke-width="1" fill="none"/>
+
+        <!-- blush -->
+        <ellipse cx="84" cy="104" rx="10" ry="6" fill="rgba(240,120,140,0.25)"/>
+        <ellipse cx="136" cy="104" rx="10" ry="6" fill="rgba(240,120,140,0.25)"/>
+
+        <!-- HAIR (front/sides) -->
+        <g id="hair-front-layer">
+          <path id="hair-front" d="M72,68 Q68,55 80,48 Q95,38 110,36 Q125,38 140,48 Q152,55 148,68 Q140,58 110,56 Q80,58 72,68 Z" fill="#4a2c0a"/>
+          <path id="hair-left" d="M72,68 Q62,80 65,100 Q68,115 72,125 Q65,110 68,90 Z" fill="#4a2c0a"/>
+          <path id="hair-right" d="M148,68 Q158,80 155,100 Q152,115 148,125 Q155,110 152,90 Z" fill="#4a2c0a"/>
+        </g>
+
+        <!-- CROWN / HAT layer (on top) -->
+        <g id="crown-layer"></g>
+
+        <!-- EARRINGS layer -->
+        <g id="earrings-layer"></g>
+
+        <!-- SHOES layer -->
+        <g id="shoes-layer">
+          <ellipse cx="92" cy="378" rx="22" ry="8" fill="#9b59b6"/>
+          <ellipse cx="128" cy="378" rx="22" ry="8" fill="#9b59b6"/>
+        </g>
+
+        <!-- WAND layer -->
+        <g id="wand-layer"></g>
+      </svg>
+    </div>
+
+    <div class="name-badge">
+      <input type="text" id="princess-name" placeholder="Princess Name…" maxlength="20"/>
+      <div class="name-hint">click to name your princess</div>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL: Hair, Crown, Accessories -->
+  <div class="panel" id="right-panel">
+    <div class="panel-title">Accessories</div>
+
+    <div class="category">
+      <div class="cat-label">Hair Style</div>
+      <div class="items" id="hair-items"></div>
+    </div>
+
+    <div class="category">
+      <div class="cat-label">Hair Color</div>
+      <div class="swatches" id="hair-colors"></div>
+    </div>
+
+    <div class="category">
+      <div class="cat-label">Crown & Tiara</div>
+      <div class="items" id="crown-items"></div>
+    </div>
+
+    <div class="category">
+      <div class="cat-label">Extras</div>
+      <div class="items" id="extra-items"></div>
+    </div>
+  </div>
+
+  <!-- ACTIONS -->
+  <div class="actions">
+    <button class="btn" onclick="randomize()">🎲 Surprise Me</button>
+    <button class="btn" onclick="resetAll()">↺ Reset</button>
+    <button class="btn primary" onclick="saveOutfit()">✦ Save Look</button>
+  </div>
+</div>
+
+<script>
+// ── STARS ──────────────────────────────────────────────────────────────
+const starsEl = document.getElementById('stars');
+for (let i = 0; i < 120; i++) {
+  const s = document.createElement('div');
+  s.className = 'star';
+  const size = Math.random() * 2.5 + 0.5;
+  s.style.cssText = `
+    width:${size}px; height:${size}px;
+    left:${Math.random()*100}%; top:${Math.random()*100}%;
+    --d:${(Math.random()*4+2).toFixed(1)}s;
+    animation-delay:${(Math.random()*5).toFixed(1)}s;
+    opacity:${Math.random()*0.5+0.1};
+  `;
+  starsEl.appendChild(s);
+}
+
+// ── STATE ──────────────────────────────────────────────────────────────
+const state = {
+  gown:      'ball',
+  gownColor: '#9b59b6',
+  cape:      'none',
+  capeColor: '#6c3483',
+  hair:      'long',
+  hairColor: '#4a2c0a',
+  crown:     'tiara',
+  necklace:  'none',
+  gloves:    false,
+  wand:      false,
+  earrings:  'none',
+  shoes:     'glass',
+};
+
+// ── COLOUR PALETTES ────────────────────────────────────────────────────
+const gownPalette = [
+  '#9b59b6','#e8608a','#3498db','#27ae60',
+  '#e67e22','#e74c3c','#1abc9c','#f0c060',
+  '#2c3e50','#d4a0d0','#a0c8e8','#ffffff',
+];
+const capePalette = [
+  '#6c3483','#c0392b','#1a5276','#145a32',
+  '#784212','#2e4057','#4a235a','#1c1c2e',
+];
+const hairPalette = [
+  '#4a2c0a','#1a1a1a','#c8a060','#e8c040',
+  '#d44020','#800020','#2060a0','#60b040',
+  '#d4a0c0','#ffffff','#606060','#8b4513',
+];
+
+// ── WARDROBE DATA ──────────────────────────────────────────────────────
+const gowns = [
+  { id:'ball',    icon:'👗', name:'Ball Gown'    },
+  { id:'empire',  icon:'🥻', name:'Empire'       },
+  { id:'mermaid', icon:'🐚', name:'Mermaid'      },
+  { id:'floral',  icon:'🌸', name:'Floral'       },
+];
+const capes = [
+  { id:'none',   icon:'✕',  name:'None'    },
+  { id:'short',  icon:'🧣', name:'Short'   },
+  { id:'long',   icon:'🦸', name:'Long'    },
+  { id:'fur',    icon:'🌟', name:'Fur Trim' },
+];
+const hairs = [
+  { id:'long',   icon:'💇', name:'Long Waves'  },
+  { id:'up',     icon:'👑', name:'Updo'        },
+  { id:'braid',  icon:'🌿', name:'Braid'       },
+  { id:'curly',  icon:'🌀', name:'Curly'       },
+];
+const crowns = [
+  { id:'none',    icon:'✕',  name:'None'     },
+  { id:'tiara',   icon:'👑', name:'Tiara'    },
+  { id:'crown',   icon:'🏆', name:'Crown'    },
+  { id:'flower',  icon:'🌺', name:'Flowers'  },
+  { id:'stars',   icon:'⭐', name:'Stars'    },
+];
+const extras = [
+  { id:'gloves',   icon:'🧤', name:'Gloves',   toggle:'gloves'   },
+  { id:'wand',     icon:'🪄', name:'Wand',     toggle:'wand'     },
+  { id:'pearls',   icon:'📿', name:'Pearls',   toggle:'necklace' },
+  { id:'earrings', icon:'💎', name:'Earrings', toggle:'earrings' },
+  { id:'shoes1',   icon:'👠', name:'Glass',    toggle:'shoes'    },
+  { id:'shoes2',   icon:'🥿', name:'Slippers', toggle:'shoes2'   },
+];
+
+// ── BUILD UI ───────────────────────────────────────────────────────────
+function buildItems(containerId, data, stateKey, callback) {
+  const el = document.getElementById(containerId);
+  el.innerHTML = '';
+  data.forEach(item => {
+    const btn = document.createElement('button');
+    btn.className = 'item-btn' + (state[stateKey] === item.id ? ' active' : '');
+    btn.dataset.id = item.id;
+    btn.innerHTML = `<span class="item-icon">${item.icon}</span><span class="item-name">${item.name}</span>`;
+    btn.onclick = () => {
+      el.querySelectorAll('.item-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      state[stateKey] = item.id;
+      callback(item.id);
+      sparkleAt(btn);
+    };
+    el.appendChild(btn);
+  });
+}
+
+function buildSwatches(containerId, palette, stateKey, callback) {
+  const el = document.getElementById(containerId);
+  el.innerHTML = '';
+  palette.forEach(col => {
+    const s = document.createElement('div');
+    s.className = 'swatch' + (state[stateKey] === col ? ' active' : '');
+    s.style.background = col;
+    s.title = col;
+    s.onclick = () => {
+      el.querySelectorAll('.swatch').forEach(x => x.classList.remove('active'));
+      s.classList.add('active');
+      state[stateKey] = col;
+      callback(col);
+    };
+    el.appendChild(s);
+  });
+}
+
+function buildExtras() {
+  const el = document.getElementById('extra-items');
+  el.innerHTML = '';
+  extras.forEach(item => {
+    const btn = document.createElement('button');
+    const isActive = item.id === 'shoes1' ? state.shoes === 'glass'
+                   : item.id === 'shoes2' ? state.shoes === 'slipper'
+                   : state[item.toggle];
+    btn.className = 'item-btn' + (isActive ? ' active' : '');
+    btn.dataset.id = item.id;
+    btn.innerHTML = `<span class="item-icon">${item.icon}</span><span class="item-name">${item.name}</span>`;
+    btn.onclick = () => {
+      if (item.id === 'shoes1' || item.id === 'shoes2') {
+        el.querySelectorAll('[data-id="shoes1"],[data-id="shoes2"]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        state.shoes = item.id === 'shoes1' ? 'glass' : 'slipper';
+        updateShoes();
+      } else {
+        state[item.toggle] = !state[item.toggle];
+        btn.classList.toggle('active', state[item.toggle]);
+        if (item.toggle === 'gloves') updateGloves();
+        if (item.toggle === 'wand')   updateWand();
+        if (item.toggle === 'necklace') updateNecklace();
+        if (item.toggle === 'earrings') updateEarrings();
+      }
+      sparkleAt(btn);
+    };
+    el.appendChild(btn);
+  });
+}
+
+// ── SVG UPDATERS ───────────────────────────────────────────────────────
+
+function updateGown(id) {
+  const skirt  = document.getElementById('gown-skirt');
+  const bodice = document.getElementById('bodice');
+  const shoes  = document.getElementById('shoes-layer');
+  const col    = state.gownColor;
+  const dark   = darken(col, 0.25);
+
+  const shapes = {
+    ball: {
+      skirt:  "M70,175 Q30,240 20,340 Q55,370 110,375 Q165,370 200,340 Q190,240 150,175 Z",
+      bodice: "M78,145 Q70,160 70,175 L150,175 Q150,160 142,145 Q125,135 110,133 Q95,135 78,145 Z",
+    },
+    empire: {
+      skirt:  "M80,155 Q55,220 45,340 Q75,365 110,368 Q145,365 175,340 Q165,220 140,155 Z",
+      bodice: "M85,138 Q80,148 80,158 L140,158 Q140,148 135,138 Q122,130 110,129 Q98,130 85,138 Z",
+    },
+    mermaid: {
+      skirt:  "M80,175 Q65,230 68,290 Q72,320 60,370 Q85,382 110,384 Q135,382 160,370 Q148,320 152,290 Q155,230 140,175 Z",
+      bodice: "M78,145 Q70,160 80,175 L140,175 Q150,160 142,145 Q125,135 110,133 Q95,135 78,145 Z",
+    },
+    floral: {
+      skirt:  "M72,175 Q40,230 35,330 Q65,368 110,372 Q155,368 185,330 Q180,230 148,175 Z",
+      bodice: "M80,142 Q72,157 72,175 L148,175 Q148,157 140,142 Q124,133 110,131 Q96,133 80,142 Z",
+    },
+  };
+
+  const s = shapes[id] || shapes.ball;
+  skirt.setAttribute('d', s.skirt);
+  bodice.setAttribute('d', s.bodice);
+  skirt.setAttribute('fill', col);
+  bodice.setAttribute('fill', dark);
+  document.getElementById('bodice-shine').setAttribute('d',
+    s.bodice.replace('Z', 'L82,170 L100,170 Z'));
+  updateShoes();
+  updateGownColor(col);
+}
+
+function updateGownColor(col) {
+  document.getElementById('gown-skirt').setAttribute('fill', col);
+  document.getElementById('bodice').setAttribute('fill', darken(col, 0.25));
+  document.getElementById('shoes-layer').querySelectorAll('ellipse').forEach(e => {
+    e.setAttribute('fill', state.shoes === 'glass' ? lighten(col, 0.3) : '#ffe8d0');
+  });
+}
+
+function updateCape(id) {
+  const layer = document.getElementById('cape-layer');
+  const col   = state.capeColor;
+  if (id === 'none') { layer.innerHTML = ''; return; }
+
+  const capes = {
+    short: `<path d="M68,148 Q40,170 35,220 Q55,230 68,215 Q75,185 80,165 Z M152,148 Q180,170 185,220 Q165,230 152,215 Q145,185 140,165 Z" fill="${col}" opacity="0.9"/>`,
+    long:  `<path d="M68,148 Q30,180 20,280 Q30,340 50,360 Q65,340 68,300 Q70,240 80,165 Z M152,148 Q190,180 200,280 Q190,340 170,360 Q155,340 152,300 Q150,240 140,165 Z" fill="${col}" opacity="0.9"/>`,
+    fur:   `<path d="M68,148 Q35,175 28,260 Q45,270 62,255 Q68,215 80,165 Z M152,148 Q185,175 192,260 Q175,270 158,255 Q152,215 140,165 Z" fill="${col}" opacity="0.9"/><path d="M68,148 Q35,175 28,260 Q45,255 62,245" fill="none" stroke="#f5f5f5" stroke-width="10" stroke-linecap="round" opacity="0.6"/><path d="M152,148 Q185,175 192,260 Q175,255 158,245" fill="none" stroke="#f5f5f5" stroke-width="10" stroke-linecap="round" opacity="0.6"/>`,
+  };
+  layer.innerHTML = capes[id] || '';
+}
+
+function updateHair(id) {
+  const col   = state.hairColor;
+  const back  = document.getElementById('hair-back');
+  const front = document.getElementById('hair-front');
+  const left  = document.getElementById('hair-left');
+  const right = document.getElementById('hair-right');
+
+  [back, front, left, right].forEach(e => { if(e) e.setAttribute('fill', col); });
+
+  const styles = {
+    long: {
+      back:  "M68,68 Q62,100 64,140 Q75,170 85,175 Q80,140 78,100 Q80,68 110,58 Q140,68 142,100 Q140,140 135,175 Q145,170 156,140 Q158,100 152,68 Q140,40 110,36 Q80,40 68,68 Z",
+      front: "M72,68 Q68,55 80,48 Q95,38 110,36 Q125,38 140,48 Q152,55 148,68 Q140,58 110,56 Q80,58 72,68 Z",
+      left:  "M72,68 Q62,80 65,100 Q68,115 72,125 Q65,110 68,90 Z",
+      right: "M148,68 Q158,80 155,100 Q152,115 148,125 Q155,110 152,90 Z",
+    },
+    up: {
+      back:  "M72,72 Q68,80 70,95 Q80,105 110,108 Q140,105 150,95 Q152,80 148,72 Q135,55 110,52 Q85,55 72,72 Z",
+      front: "M72,72 Q68,58 82,48 Q96,38 110,36 Q124,38 138,48 Q152,58 148,72 Q140,62 110,60 Q80,62 72,72 Z",
+      left:  "M72,72 Q65,80 68,90 Q70,96 74,100 Z",
+      right: "M148,72 Q155,80 152,90 Q150,96 146,100 Z",
+    },
+    braid: {
+      back:  "M68,68 Q58,100 60,150 Q68,180 80,185 Q76,150 74,110 Q76,78 110,62 Q144,78 146,110 Q144,150 140,185 Q152,180 160,150 Q162,100 152,68 Q136,42 110,38 Q84,42 68,68 Z",
+      front: "M72,68 Q68,55 82,46 Q96,38 110,36 Q124,38 138,46 Q152,55 148,68 Q138,58 110,56 Q82,58 72,68 Z",
+      left:  "M72,68 Q60,82 62,102 Q64,118 68,128 Q63,112 65,92 Z",
+      right: "M148,68 Q160,82 158,102 Q156,118 152,128 Q157,112 155,92 Z",
+    },
+    curly: {
+      back:  "M65,72 Q52,95 55,130 Q62,168 78,180 Q72,148 70,112 Q72,80 110,62 Q148,80 150,112 Q148,148 142,180 Q158,168 165,130 Q168,95 155,72 Q138,42 110,38 Q82,42 65,72 Z",
+      front: "M70,72 Q66,56 80,46 Q95,36 110,34 Q125,36 140,46 Q154,56 150,72 Q138,60 110,58 Q82,60 70,72 Z",
+      left:  "M70,72 Q58,84 60,106 Q62,120 66,132 Q59,115 61,94 Z",
+      right: "M150,72 Q162,84 160,106 Q158,120 154,132 Q161,115 159,94 Z",
+    },
+  };
+
+  const s = styles[id] || styles.long;
+  if (back)  back.setAttribute('d', s.back);
+  if (front) front.setAttribute('d', s.front);
+  if (left)  left.setAttribute('d', s.left);
+  if (right) right.setAttribute('d', s.right);
+}
+
+function updateHairColor(col) {
+  ['hair-back','hair-front','hair-left','hair-right'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.setAttribute('fill', col);
+  });
+}
+
+function updateCrown(id) {
+  const layer = document.getElementById('crown-layer');
+  const col   = state.gownColor;
+  const gold  = '#f0c060';
+  const crowns = {
+    none:   '',
+    tiara:  `<g filter="url(#glow)">
+               <path d="M78,58 Q90,40 110,36 Q130,40 142,58 Q130,50 110,48 Q90,50 78,58 Z" fill="${gold}"/>
+               <circle cx="110" cy="36" r="5" fill="#e8a0c0"/>
+               <circle cx="88" cy="46" r="3.5" fill="#a0e0f0"/>
+               <circle cx="132" cy="46" r="3.5" fill="#a0e0f0"/>
+               <path d="M78,58 Q90,50 110,48 Q130,50 142,58" fill="none" stroke="${gold}" stroke-width="2"/>
+             </g>`,
+    crown:  `<g filter="url(#glow)">
+               <rect x="76" y="48" width="68" height="22" rx="3" fill="${gold}"/>
+               <polygon points="76,48 84,30 92,48" fill="${gold}"/>
+               <polygon points="102,48 110,26 118,48" fill="${gold}"/>
+               <polygon points="128,48 136,30 144,48" fill="${gold}"/>
+               <circle cx="84" cy="34" r="4" fill="#e83060"/>
+               <circle cx="110" cy="30" r="5" fill="#a060e8"/>
+               <circle cx="136" cy="34" r="4" fill="#30a0e8"/>
+               <rect x="76" y="66" width="68" height="4" rx="2" fill="${darken(gold,0.2)}"/>
+             </g>`,
+    flower: `<g>
+               <circle cx="110" cy="40" r="7" fill="#e8a0c0"/>
+               <circle cx="95"  cy="48" r="5" fill="#f0c0d0"/>
+               <circle cx="125" cy="48" r="5" fill="#f0c0d0"/>
+               <circle cx="85"  cy="58" r="4" fill="#d4e0a0"/>
+               <circle cx="135" cy="58" r="4" fill="#d4e0a0"/>
+               <circle cx="110" cy="40" r="3" fill="#f0e060"/>
+               <circle cx="95"  cy="48" r="2" fill="#f0e060"/>
+               <circle cx="125" cy="48" r="2" fill="#f0e060"/>
+             </g>`,
+    stars:  `<g filter="url(#glow)">
+               ${[
+                 [110,30,8,'#f0e060'],[90,44,5,'#f0c060'],[130,44,5,'#f0c060'],
+                 [76,56,4,'#e0d050'],[144,56,4,'#e0d050']
+               ].map(([x,y,r,c]) =>
+                 `<polygon points="${star5(x,y,r,r*0.4)}" fill="${c}"/>`
+               ).join('')}
+             </g>`,
+  };
+  layer.innerHTML = crowns[id] || '';
+}
+
+function star5(cx, cy, r, ir) {
+  let pts = '';
+  for (let i = 0; i < 10; i++) {
+    const a = (i * Math.PI / 5) - Math.PI / 2;
+    const rad = i % 2 === 0 ? r : ir;
+    pts += `${(cx + Math.cos(a)*rad).toFixed(1)},${(cy + Math.sin(a)*rad).toFixed(1)} `;
+  }
+  return pts.trim();
+}
+
+function updateGloves() {
+  document.getElementById('gloves-layer').setAttribute('display', state.gloves ? '' : 'none');
+}
+
+function updateWand() {
+  const layer = document.getElementById('wand-layer');
+  if (!state.wand) { layer.innerHTML = ''; return; }
+  layer.innerHTML = `
+    <g filter="url(#glow)">
+      <line x1="168" y1="200" x2="190" y2="155" stroke="#c8a060" stroke-width="5" stroke-linecap="round"/>
+      <polygon points="${star5(190,150,14,6)}" fill="#f0e060"/>
+      <circle cx="190" cy="150" r="6" fill="white" opacity="0.8"/>
+    </g>`;
+}
+
+function updateNecklace() {
+  const layer = document.getElementById('necklace-layer');
+  if (!state.necklace) { layer.innerHTML = ''; return; }
+  layer.innerHTML = `
+    <g>
+      <path d="M90,130 Q110,140 130,130" fill="none" stroke="#f0c060" stroke-width="2"/>
+      ${[90,97,104,110,116,123,130].map((x,i) => {
+        const y = 130 + Math.sin((i/6)*Math.PI)*6;
+        return `<circle cx="${x}" cy="${y}" r="3" fill="${i===3?'#e83060':'#f0e060'}"/>`;
+      }).join('')}
+    </g>`;
+}
+
+function updateEarrings() {
+  const layer = document.getElementById('earrings-layer');
+  if (!state.earrings) { layer.innerHTML = ''; return; }
+  layer.innerHTML = `
+    <g filter="url(#glow)">
+      <circle cx="72" cy="100" r="4" fill="#f0c060"/>
+      <path d="M72,104 L68,116 L72,120 L76,116 Z" fill="#60c8f0"/>
+      <circle cx="148" cy="100" r="4" fill="#f0c060"/>
+      <path d="M148,104 L144,116 L148,120 L152,116 Z" fill="#60c8f0"/>
+    </g>`;
+}
+
+function updateShoes() {
+  const layer = document.getElementById('shoes-layer');
+  const col   = state.shoes === 'glass' ? lighten(state.gownColor, 0.3) : '#ffe8d0';
+  layer.innerHTML = `
+    <ellipse cx="92" cy="378" rx="22" ry="8" fill="${col}"/>
+    <ellipse cx="128" cy="378" rx="22" ry="8" fill="${col}"/>
+    <rect x="84" y="362" width="10" height="16" rx="3" fill="${col}"/>
+    <rect x="120" y="362" width="10" height="16" rx="3" fill="${col}"/>
+    ${state.shoes === 'glass' ? `
+      <ellipse cx="92" cy="378" rx="22" ry="8" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
+      <ellipse cx="128" cy="378" rx="22" ry="8" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
+    ` : ''}`;
+}
+
+// ── COLOR UTILS ────────────────────────────────────────────────────────
+function hexToRgb(hex) {
+  const r = parseInt(hex.slice(1,3),16);
+  const g = parseInt(hex.slice(3,5),16);
+  const b = parseInt(hex.slice(5,7),16);
+  return [r,g,b];
+}
+function rgbToHex(r,g,b) {
+  return '#' + [r,g,b].map(v => Math.min(255,Math.max(0,Math.round(v))).toString(16).padStart(2,'0')).join('');
+}
+function darken(hex, amt) {
+  const [r,g,b] = hexToRgb(hex);
+  return rgbToHex(r*(1-amt), g*(1-amt), b*(1-amt));
+}
+function lighten(hex, amt) {
+  const [r,g,b] = hexToRgb(hex);
+  return rgbToHex(r+(255-r)*amt, g+(255-g)*amt, b+(255-b)*amt);
+}
+
+// ── SPARKLE FX ────────────────────────────────────────────────────────
+function sparkleAt(el) {
+  const rect = el.getBoundingClientRect();
+  const cx = rect.left + rect.width/2;
+  const cy = rect.top + rect.height/2;
+  ['✦','✧','★','·','✨'].forEach((s,i) => {
+    const sp = document.createElement('div');
+    sp.className = 'sparkle';
+    sp.textContent = s;
+    const angle = (i/5)*Math.PI*2;
+    const dist = 30 + Math.random()*30;
+    sp.style.cssText = `left:${cx}px; top:${cy}px; --tx:${Math.cos(angle)*dist}px; --ty:${Math.sin(angle)*dist}px; color:${['#f0c060','#e8608a','#c8a0e8'][i%3]}; animation-delay:${i*0.05}s`;
+    document.body.appendChild(sp);
+    setTimeout(() => sp.remove(), 900);
+  });
+}
+
+function sparkleStage() {
+  const wrap = document.getElementById('character-wrap');
+  const rect = wrap.getBoundingClientRect();
+  for (let i = 0; i < 12; i++) {
+    setTimeout(() => {
+      const sp = document.createElement('div');
+      sp.className = 'sparkle';
+      sp.textContent = ['✦','✧','★','·'][i%4];
+      const angle = Math.random()*Math.PI*2;
+      const dist = 60 + Math.random()*80;
+      const ox = rect.left + Math.random()*rect.width;
+      const oy = rect.top + Math.random()*rect.height;
+      sp.style.cssText = `left:${ox}px; top:${oy}px; --tx:${Math.cos(angle)*dist}px; --ty:${Math.sin(angle)*dist}px; color:${['#f0c060','#e8608a','#c8a0e8'][i%3]}; font-size:${0.8+Math.random()*0.8}rem`;
+      document.body.appendChild(sp);
+      setTimeout(() => sp.remove(), 900);
+    }, i * 60);
+  }
+}
+
+// ── INIT UI ────────────────────────────────────────────────────────────
+buildItems('gown-items', gowns, 'gown', id => { state.gown = id; updateGown(id); });
+buildItems('cape-items', capes, 'cape', id => { state.cape = id; updateCape(id); });
+buildItems('hair-items', hairs, 'hair', id => { state.hair = id; updateHair(id); });
+buildItems('crown-items', crowns, 'crown', id => { state.crown = id; updateCrown(id); });
+buildExtras();
+
+buildSwatches('gown-colors', gownPalette, 'gownColor', col => {
+  state.gownColor = col;
+  updateGownColor(col);
+  updateCrown(state.crown);
+});
+buildSwatches('cape-colors', capePalette, 'capeColor', col => {
+  state.capeColor = col;
+  updateCape(state.cape);
+});
+buildSwatches('hair-colors', hairPalette, 'hairColor', col => {
+  state.hairColor = col;
+  updateHairColor(col);
+});
+
+// apply defaults
+updateGown('ball');
+updateHair('long');
+updateCrown('tiara');
+updateShoes();
+updateNecklace();
+
+// ── ACTIONS ────────────────────────────────────────────────────────────
+function randomize() {
+  const pick = arr => arr[Math.floor(Math.random()*arr.length)];
+  state.gownColor = pick(gownPalette);
+  state.capeColor = pick(capePalette);
+  state.hairColor = pick(hairPalette);
+
+  const gownId  = pick(gowns).id;
+  const capeId  = pick(capes).id;
+  const hairId  = pick(hairs).id;
+  const crownId = pick(crowns).id;
+
+  state.gown   = gownId;
+  state.cape   = capeId;
+  state.hair   = hairId;
+  state.crown  = crownId;
+  state.gloves = Math.random() > 0.5;
+  state.wand   = Math.random() > 0.5;
+  state.necklace = Math.random() > 0.5;
+  state.earrings = Math.random() > 0.5;
+
+  // rebuild all UI
+  buildItems('gown-items', gowns, 'gown', id => { state.gown=id; updateGown(id); });
+  buildItems('cape-items', capes, 'cape', id => { state.cape=id; updateCape(id); });
+  buildItems('hair-items', hairs, 'hair', id => { state.hair=id; updateHair(id); });
+  buildItems('crown-items', crowns, 'crown', id => { state.crown=id; updateCrown(id); });
+  buildExtras();
+  buildSwatches('gown-colors', gownPalette, 'gownColor', col => { state.gownColor=col; updateGownColor(col); updateCrown(state.crown); });
+  buildSwatches('cape-colors', capePalette, 'capeColor', col => { state.capeColor=col; updateCape(state.cape); });
+  buildSwatches('hair-colors', hairPalette, 'hairColor', col => { state.hairColor=col; updateHairColor(col); });
+
+  updateGown(gownId);
+  updateGownColor(state.gownColor);
+  updateCape(capeId);
+  updateHair(hairId);
+  updateHairColor(state.hairColor);
+  updateCrown(crownId);
+  updateGloves();
+  updateWand();
+  updateNecklace();
+  updateEarrings();
+  updateShoes();
+
+  sparkleStage();
+}
+
+function resetAll() {
+  state.gown      = 'ball';
+  state.gownColor = '#9b59b6';
+  state.cape      = 'none';
+  state.capeColor = '#6c3483';
+  state.hair      = 'long';
+  state.hairColor = '#4a2c0a';
+  state.crown     = 'tiara';
+  state.gloves    = false;
+  state.wand      = false;
+  state.necklace  = false;
+  state.earrings  = false;
+  state.shoes     = 'glass';
+  document.getElementById('princess-name').value = '';
+  randomize(); // reuse rebuild logic
+  // then reapply reset values
+  setTimeout(() => {
+    updateGown('ball');
+    updateGownColor('#9b59b6');
+    updateCape('none');
+    updateHair('long');
+    updateHairColor('#4a2c0a');
+    updateCrown('tiara');
+    updateGloves();
+    updateWand();
+    updateNecklace();
+    updateEarrings();
+    updateShoes();
+  }, 10);
+}
+
+function saveOutfit() {
+  const name = document.getElementById('princess-name').value || 'Princess';
+  sparkleStage();
+  setTimeout(() => {
+    alert(`✨ ${name}'s royal look has been saved to your heart! ✨\n\nGown: ${state.gown} • Hair: ${state.hair} • Crown: ${state.crown}`);
+  }, 400);
+}
+
+// click on character for sparkles
+document.getElementById('character-wrap').addEventListener('click', sparkleStage);
+</script>
+</body>
+</html>
